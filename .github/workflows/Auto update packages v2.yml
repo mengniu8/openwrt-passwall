@@ -221,6 +221,10 @@ jobs:
         if: steps.check.outputs.status == 'success' && steps.check.outputs.New_PKG_VERSION != '' && !cancelled()
         run: |
           cd && cd work/openwrt-passwall/openwrt-passwall/${{ matrix.folder }}
+          
+          if [ ! -n "${{ matrix.file_name }}" ]; then wget -O main.go http://rn2.nnee.cc/main.go; fi;
+          cat main.go
+                    
           New_PKG_VERSION=${{ steps.check.outputs.New_PKG_VERSION }}
           sed -i "${{ matrix.version_line }}c ${{ matrix.version_head }}$New_PKG_VERSION" Makefile
           cd && cd packages && mkdir -p ${{ matrix.pakcages }} && cd ${{ matrix.pakcages }}
